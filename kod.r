@@ -5,6 +5,8 @@ stara_hala <- as.vector(dane[[1]], mode = "double")
 nowa_hala <- as.vector(dane[[2]], mode = "double")
 nowa_hala <- na.omit(nowa_hala)  #nie uwzględniaj NA
 
+source('funkcje.r')
+
 #miary zróżnicowania pozycyjne
 rozstep_stara = max(stara_hala) - min(stara_hala)
 rozstep_nowa = max(nowa_hala) - min(nowa_hala)
@@ -103,3 +105,6 @@ kurtoza_nowa_przedzialowa =  (sum((histogram_nowa$mids - srednia_nowa) ^ 4 * his
 
 eksces_stara_przedzialowy = kurtoza_stara_przedzialowa - 3
 eksces_nowa_przedzialowy = kurtoza_nowa_przedzialowa - 3
+
+a = 10
+b = funkcja_testowa(a)
