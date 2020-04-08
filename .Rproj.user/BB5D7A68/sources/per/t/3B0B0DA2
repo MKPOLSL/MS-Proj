@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1586336484506.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1643659172",
+    "id" : "3B0B0DA2",
+    "lastKnownWriteTime" : 1586331875,
+    "last_content_update" : 1586336521021,
+    "path" : "C:/Users/CLEVO/Desktop/Gildia Magów Ognia/MS/projekt/MS-proj/kod.r",
+    "project_path" : "kod.r",
+    "properties" : {
+        "cursorPosition" : "69,0",
+        "scrollLine" : "21"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
