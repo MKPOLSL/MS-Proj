@@ -108,3 +108,10 @@ eksces_nowa_przedzialowy = kurtoza_nowa_przedzialowa - 3
 
 a = 10
 b = funkcja_testowa(a)
+
+#2
+
+#tu zajebalem z innego projektu, trzeba tylko dane pozmieniac xd
+#x <- test_zgodnosci(stara_hala)
+#y <- test_zgodnosci(nowa_hala)
+
