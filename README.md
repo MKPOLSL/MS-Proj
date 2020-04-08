@@ -1,4 +1,5 @@
 # MS-Proj
+![dżif] (https://media.giphy.com/media/DHqth0hVQoIzS/giphy.gif)
 
 # zadania:
 - [x] 1.
