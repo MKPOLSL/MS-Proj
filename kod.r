@@ -190,7 +190,6 @@ if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyk
   writeLines("Dane nie maja rozkladu normalnego\n")
 }
 #koniec zadania 2
-#tu zajebalem z innego projektu, trzeba tylko dane pozmieniac xd
 #x <- test_zgodnosci(stara_hala)
 #y <- test_zgodnosci(nowa_hala)
 
