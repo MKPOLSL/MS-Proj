@@ -109,8 +109,87 @@ eksces_nowa_przedzialowy = kurtoza_nowa_przedzialowa - 3
 a = 10
 b = funkcja_testowa(a)
 
-#2
+#2 prosze uprzejmie sprawdzic czy zmiennatablica rozkladu jest dobrze policzona 
+tablica_rozkladu_stara=sqrt(length(stara_hala))
+tablica_rozkladu_nowa=sqrt(length(nowa_hala))
+srednia_stara=sum(stara_hala)/length(stara_hala)
+srednia_nowa=sum(nowa_hala)/length(nowa_hala)
 
+#sortowansko starej i nowej 
+dane_stara <-sort(stara_hala)
+dane_nowa<-sort(nowa_hala)
+#standaryzacja starej
+standaryzacja_stara<-dane_stara
+for(i in stara_hala)
+{
+  standaryzacja_stara[i]<-(dane_stara[i]-srednia_stara)/odchylenie_standardowe_stara
+}
+#standaryzacja nowej
+standaryzacja_nowa<-dane_nowa
+for(i in nowa_hala)
+{
+  standaryzacja_nowa[i]<-(dane_nowa[i]-srednia_nowa)/odchylenie_standardowe_nowa
+}
+#dystrybuanta rozkladu hipotetycznego starej
+dystrybuanta_hipotetyczna_stara<-dane_stara
+for(i in stara_hala) {
+  dystrybuanta_hipotetyczna_stara[i] <- pnorm(standaryzacja_stara[i]) #pnorm zwraca funkcję dystrybuanty
+}
+
+dystrybuanta_hipotetyczna_nowa<-dane_nowa
+for(i in nowa_hala) {
+  dystrybuanta_hipotetyczna_nowa[i] <- pnorm(standaryzacja_nowa[i]) #pnorm zwraca funkcję dystrybuanty
+}
+
+#dystrybuanta empiryczna starej
+dystrybuanta_empiryczna_stara<-dane_stara
+
+for(i in stara_hala) {
+  dystrybuanta_empiryczna_stara[i] <- i/length(stara_hala)
+}
+
+#dystrybuanta empiryczna nowa
+dystrybuanta_empiryczna_nowa<-dane_nowa
+
+for(i in nowa_hala) {
+  dystrybuanta_empiryczna_nowa[i] <- i/length(nowa_hala)
+}
+# roznica dystrybuant
+roznica_stara<-0
+for(i in stara_hala) {
+  roznica_stara[i] <- abs(dystrybuanta_hipotetyczna_stara[i] - dystrybuanta_empiryczna_stara[i])
+}
+# roznica dystrybuant
+roznica_nowa<-0
+for(i in nowa_hala) {
+  roznica_nowa[i] <- abs(dystrybuanta_hipotetyczna_nowa[i] - dystrybuanta_empiryczna_nowa[i])
+}
+# Wartosc statystyki testowej
+wartosc_statystyki_testowej_stara <- max(roznica_stara,na.rm=TRUE)
+
+wartosc_statystyki_testowej_nowa <- max(roznica_nowa,na.rm=TRUE)
+
+writeLines("H0 - rozkład normalny\n")
+writeLines("H1 - brak rozkładu normalnego\n")
+
+writeLines("dla starej hali rozklad normalny:\n")
+if(wartosc_statystyki_testowej_stara < tablica_rozkladu_stara || wartosc_statystyki_testowej_stara> 1){
+  writeLines("Brak podstaw do odrzucenia hipotezy H0\n")
+  writeLines("Dane mają rozkład normalny\n")
+}else{
+  writeLines("Istnieją podstawy do odrzucenia hipotezy H0\n")
+  writeLines("Dane nie maja rozkladu normalnego\n")
+}
+
+writeLines("dla nowej hali rozklad normalny:\n")
+if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyki_testowej_nowa> 1){
+  writeLines("Brak podstaw do odrzucenia hipotezy H0\n")
+  writeLines("Dane mają rozkład normalny\n")
+}else{
+  writeLines("Istnieją podstawy do odrzucenia hipotezy H0\n")
+  writeLines("Dane nie maja rozkladu normalnego\n")
+}
+#koniec zadania 2
 #tu zajebalem z innego projektu, trzeba tylko dane pozmieniac xd
 #x <- test_zgodnosci(stara_hala)
 #y <- test_zgodnosci(nowa_hala)
