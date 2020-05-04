@@ -110,8 +110,8 @@ a = 10
 b = funkcja_testowa(a)
 
 #2 prosze uprzejmie sprawdzic czy zmiennatablica rozkladu jest dobrze policzona 
-tablica_rozkladu_stara=sqrt(length(stara_hala))
-tablica_rozkladu_nowa=sqrt(length(nowa_hala))
+tablica_rozkladu_stara<-((0.83+length(stara_hala))/(sqrt(length(stara_hala))))-0.1
+tablica_rozkladu_nowa<-((0.83+length(nowa_hala))/(sqrt(length(nowa_hala))))-0.1
 srednia_stara=sum(stara_hala)/length(stara_hala)
 srednia_nowa=sum(nowa_hala)/length(nowa_hala)
 
@@ -169,24 +169,24 @@ wartosc_statystyki_testowej_stara <- max(roznica_stara,na.rm=TRUE)
 
 wartosc_statystyki_testowej_nowa <- max(roznica_nowa,na.rm=TRUE)
 
-writeLines("H0 - rozkład normalny\n")
-writeLines("H1 - brak rozkładu normalnego\n")
+writeLines("H0 - rozklad normalny\n")
+writeLines("H1 - brak rozkladu normalnego\n")
 
 writeLines("dla starej hali rozklad normalny:\n")
 if(wartosc_statystyki_testowej_stara < tablica_rozkladu_stara || wartosc_statystyki_testowej_stara> 1){
   writeLines("Brak podstaw do odrzucenia hipotezy H0\n")
-  writeLines("Dane mają rozkład normalny\n")
+  writeLines("Dane maja rozklad normalny\n")
 }else{
-  writeLines("Istnieją podstawy do odrzucenia hipotezy H0\n")
+  writeLines("Istnieja podstawy do odrzucenia hipotezy H0\n")
   writeLines("Dane nie maja rozkladu normalnego\n")
 }
 
 writeLines("dla nowej hali rozklad normalny:\n")
 if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyki_testowej_nowa> 1){
   writeLines("Brak podstaw do odrzucenia hipotezy H0\n")
-  writeLines("Dane mają rozkład normalny\n")
+  writeLines("Dane maja rozklad normalny\n")
 }else{
-  writeLines("Istnieją podstawy do odrzucenia hipotezy H0\n")
+  writeLines("Istnieja podstawy do odrzucenia hipotezy H0\n")
   writeLines("Dane nie maja rozkladu normalnego\n")
 }
 #koniec zadania 2
