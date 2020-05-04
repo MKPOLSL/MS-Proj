@@ -193,23 +193,104 @@ if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyk
 #x <- test_zgodnosci(stara_hala)
 #y <- test_zgodnosci(nowa_hala)
 
+#wczytanie danych
+
+dane <- read.csv2("dane.csv", sep=";")
+stara_hala <- as.vector(dane[[1]], mode = "double")
+nowa_hala <- as.vector(dane[[2]], mode = "double")
+nowa_hala <- na.omit(nowa_hala)  #nie uwzglÄ™dniaj NA
+
+#miary przeciÄ™tne - Ĺ›rednia arytmetyczna (szereg szczegĂłĹ‚owy)
+
+suma_stara <- sum(stara_hala)
+liczba_stara <- length(stara_hala)
+
+suma_nowa <- sum(nowa_hala)
+liczba_nowa <- length(nowa_hala)
+
+srednia_stara <- suma_stara / liczba_stara
+srednia_nowa <- suma_nowa / liczba_nowa
+
+#miary zroznicowania klasyczne
+wariancja_nowa <- 0
+wariancja_stara <- 0
+odch_przecietne_nowa <- 0
+odch_przecietne_stara <- 0
+for(val in nowa_hala)
+{
+  wariancja_nowa <- wariancja_nowa + (val-srednia_nowa)^2/liczba_nowa
+}
+for(val in nowa_hala)
+{
+  odch_przecietne_nowa <- odch_przecietne_nowa + abs(val-srednia_nowa)/liczba_nowa
+}
+for(val in stara_hala)
+{
+  wariancja_stara <- wariancja_stara + (val-srednia_stara)^2/liczba_stara
+}
+for(val in stara_hala)
+{
+  odch_przecietne_stara <- odch_przecietne_stara + abs(val-srednia_stara)/liczba_stara
+}
+
+odchylenie_standardowe_nowa <- sqrt(wariancja_nowa)
+odchylenie_standardowe_stara <- sqrt(wariancja_stara)
+
+mediana_nowa <- median(nowa_hala)
+mediana_stara <- median(stara_hala)
+
+kwantyl_25_nowa <- quantile(nowa_hala, probs=(0.25))
+kwantyl_75_nowa <- quantile(nowa_hala, probs=(0.75))
+
+kwantyl_25_stara <- quantile(stara_hala, probs=(0.25))
+kwantyl_75_stara <- quantile(stara_hala, probs=(0.75))
+
+odchylenie_cwiartkowe_nowa <- (kwantyl_75_nowa - kwantyl_25_nowa)/2
+odchylenie_cwiartkowe_stara <- (kwantyl_75_stara - kwantyl_25_stara)/2
+
+wspolczynnik_pozycyjny_nowa <- (odchylenie_cwiartkowe_nowa/mediana_nowa)*100
+wspolczynnik_pozycyjny_stara <- (odchylenie_cwiartkowe_stara/mediana_stara)*100
+
+wspolczynnik_zmiennosci_nowa <- (odchylenie_standardowe_nowa/srednia_nowa)*100
+wspolczynnik_zmiennosci_stara <- (odchylenie_standardowe_stara/srednia_stara)*100
+
+hist(nowa_hala)
+hist(stara_hala)
+
+#szereg przedziaĹ‚owy
+nowa_przedzial <- cut(nowa_hala, sqrt(liczba_nowa))
+stara_przedzial <- cut(stara_hala, sqrt(liczba_stara))
+
+nowa_przedzial <- hist(nowa_hala)
+stara_przedzial <- hist(stara_hala)
+
+suma_stara <- sum(stara_przedzial$counts * stara_przedzial$mids)
+suma_nowa <- sum(nowa_przedzial$counts * nowa_przedzial$mids)
+
+srednia_przedzial_stara <- suma_stara / sum(stara_przedzial$counts)
+srednia_przedzial_nowa <- suma_nowa / sum(nowa_przedzial$counts)
+
+wariancja_przedzial_stara = sum(((stara_przedzial$mids-srednia_przedzial_stara) ^ 2) * stara_przedzial$counts) / sum(stara_przedzial$counts)
+wariancja_przedzial_nowa = sum(((nowa_przedzial$mids-srednia_przedzial_nowa) ^ 2) * nowa_przedzial$counts) / sum(nowa_przedzial$counts)
+
+nowa_przedzial_srednia <- sum(nowa_przedzial$counts * nowa_przedzial$mids)/sum(nowa_przedzial$counts)
+
 # zadanie 3
 # Współczynnik ufności 1 - alfa = 0.95
 # stąd alfa = 0.05
-# Wartość tablicowa dla t(0.05, 25-1) wynosi 2.492
-wspTStudenta <- function(ufn, n) {
+wspolczynnik_TStudenta <- function(ufn, n) {
   return(qt((1 - ufn) / 2, n - 1, lower.tail = FALSE, log.p = FALSE))
 }
 
-# Przedział ufności dla średniej wagi owoców (w tradycyjnym systemie nawożenia)
-dolnaGranicaSred <- function(sr, wspT, odch, licz) {
-  dolnaGranica = sr - wspT * (odch / sqrt(licz - 1))
-  return(dolnaGranica)
+# Przedział ufności dla średniej
+dolna_granica_sred <- function(srednia, wspT, odch, licz) {
+  dolna_granica = srednia - wspT * (odch / sqrt(licz - 1))
+  return(dolna_granica)
 }
 
-gornaGranicaSred <- function(sr, wspT, odch, licz) {
-  gornaGranica = sr + wspT * (odch / sqrt(licz - 1))
-  return(gornaGranica)
+gorna_granica_sred <- function(srednia, wspT, odch, licz) {
+  gorna_granica = srednia + wspT * (odch / sqrt(licz - 1))
+  return(gorna_granica)
 }
 
 # Względna precyzja oszacowania
@@ -218,47 +299,46 @@ precyzjaSred <- function(gg, dg, sr){
   return(precyzjaOszacowaniaTrad)
 }
 
-# Przedział ufności dla tradycyjnego systemu nawożenia
-granicaDolnaStara <- dolnaGranicaSred(srednia_stara, wspTStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
-granicaGornaStara <- gornaGranicaSred(srednia_stara, wspTStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
+# Przedział ufności dla starej hali
+granica_dolna_stara <- dolnaGranicaSred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
+granica_gorna_stara <- gornaGranicaSred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
 # przedzial <46, 52>
 # srednia = 49 więc zawiera się w przedziale ufności
 
-# Precyzja oszacowania dla tradycyjnego systemu nawożenia
+# Precyzja oszacowania dla starej hali
 precyzja_stara <- precyzjaSred(granicaGornaStara, granicaDolnaStara, srednia_stara)
 
 # zadanie 4
-# Alfa = 0.05
 # Współczynnik ufności 1 - alfa = 0.95
-# Wartości tablicowe dla chikwadrat: chi(0.99,25-1)=10.8563, chi(0.01,25-1)=42.9798
+
 wspChiKwadrat<-function(ufn,n){
   return (qchisq(ufn,n-1))
 }
-#Granice przedziału ufności dla wariancji wagi owoców (w nowym systemie nawożenia)
-GranicaWar<-function(n,war,wspChi){
+#Granice przedziału ufności dla wariancji wartości pracy nowej hali
+granica_wariancja<-function(n,war,wspChi){
   return(n*war/wspChi)
 }
 #Względna precyzja oszacowania
-wzgPrecyzjaWar<-function(dolnaGranica,gornaGranica,war){
+wzgledna_precyzja_wariancja <- function(dolnaGranica,gornaGranica,war){
   return(0.5*((gornaGranica-dolnaGranica)/war))
 }
 
-#Współczynniki chiKwadrat dla: chi(0.99,24), chi(0.01,24)
+#Współczynniki chiKwadrat dla: chi(0.975,42), chi(0.025,42)
 wspAlfa<-0.05
-ChiKwadrat1<-wspChiKwadrat(wspAlfa/2,liczba_nowa) #podajemy dokładną wartość, ponieważ zmniejszenie stopni swobody znajduje się wewnątrz ciała funkcji
+ChiKwadrat1<-wspChiKwadrat(wspAlfa/2,liczba_nowa) 
 ChiKwadrat2<-wspChiKwadrat(1-(wspAlfa/2),liczba_nowa)
 
-#Przedział ufności dla nowego systemu nawożenia
-gornaGranicaNowa <- GranicaWar(liczba_nowa,wariancja_nowa,ChiKwadrat1)
-dolnaGranicaNowa <- GranicaWar(liczba_nowa,wariancja_nowa,ChiKwadrat2)
+#Przedział ufności dla nowej hali
+gornaGranicaNowa <- granica_wariancja(liczba_nowa,wariancja_nowa,ChiKwadrat1)
+dolnaGranicaNowa <- granica_wariancja(liczba_nowa,wariancja_nowa,ChiKwadrat2)
 
 gornaGranicaNowa <- sqrt(gornaGranicaNowa)
 dolnaGranicaNowa <- sqrt(dolnaGranicaNowa)
 # przedzial <8, 13>
 # odchylenie standardowe = 10, zawiera sie w przedziale
 
-#Precyzja oszacowania dla nowego systemu nawożenia
-precyzja_nowa <- wzgPrecyzjaWar(dolnaGranicaNowa,gornaGranicaNowa,wariancja_nowa)
+#Precyzja oszacowania dla nowej hali
+precyzja_nowa <- wzgledna_precyzja_wariancja(dolnaGranicaNowa,gornaGranicaNowa,wariancja_nowa)
 
 #zadanie 5
 
@@ -285,4 +365,6 @@ kwantyl95 <- qnorm(0.95)
 print(paste("Obszar przyjec statystyki: (",format(kwantyl95, digits=3), ", nieskonczonosc)"))
 print(paste("Obszar krytyczny statystyki: (-nieskonczonosc, ",format(kwantyl95, digits=3), ")"))
 print(paste("Wartosc statystyki testowej: ", format(wartosc.statystyki, digits=3)))
+
+
 
