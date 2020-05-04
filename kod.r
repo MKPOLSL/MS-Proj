@@ -110,8 +110,8 @@ a = 10
 b = funkcja_testowa(a)
 
 #2 prosze uprzejmie sprawdzic czy zmiennatablica rozkladu jest dobrze policzona 
-tablica_rozkladu_stara<-((0.83+length(stara_hala))/(sqrt(length(stara_hala))))-0.1
-tablica_rozkladu_nowa<-((0.83+length(nowa_hala))/(sqrt(length(nowa_hala))))-0.1
+tablica_rozkladu_stara<-((0.83+length(stara_hala))/(sqrt(length(stara_hala))))-0.01
+tablica_rozkladu_nowa<-((0.83+length(nowa_hala))/(sqrt(length(nowa_hala))))-0.01
 srednia_stara=sum(stara_hala)/length(stara_hala)
 srednia_nowa=sum(nowa_hala)/length(nowa_hala)
 
