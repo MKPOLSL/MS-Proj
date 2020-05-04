@@ -193,3 +193,96 @@ if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyk
 #x <- test_zgodnosci(stara_hala)
 #y <- test_zgodnosci(nowa_hala)
 
+# zadanie 3
+# Współczynnik ufności 1 - alfa = 0.95
+# stąd alfa = 0.05
+# Wartość tablicowa dla t(0.05, 25-1) wynosi 2.492
+wspTStudenta <- function(ufn, n) {
+  return(qt((1 - ufn) / 2, n - 1, lower.tail = FALSE, log.p = FALSE))
+}
+
+# Przedział ufności dla średniej wagi owoców (w tradycyjnym systemie nawożenia)
+dolnaGranicaSred <- function(sr, wspT, odch, licz) {
+  dolnaGranica = sr - wspT * (odch / sqrt(licz - 1))
+  return(dolnaGranica)
+}
+
+gornaGranicaSred <- function(sr, wspT, odch, licz) {
+  gornaGranica = sr + wspT * (odch / sqrt(licz - 1))
+  return(gornaGranica)
+}
+
+# Względna precyzja oszacowania
+precyzjaSred <- function(gg, dg, sr){
+  precyzjaOszacowaniaTrad = 0.5 * (gg - dg) / sr
+  return(precyzjaOszacowaniaTrad)
+}
+
+# Przedział ufności dla tradycyjnego systemu nawożenia
+granicaDolnaStara <- dolnaGranicaSred(srednia_stara, wspTStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
+granicaGornaStara <- gornaGranicaSred(srednia_stara, wspTStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
+# przedzial <46, 52>
+# srednia = 49 więc zawiera się w przedziale ufności
+
+# Precyzja oszacowania dla tradycyjnego systemu nawożenia
+precyzja_stara <- precyzjaSred(granicaGornaStara, granicaDolnaStara, srednia_stara)
+
+# zadanie 4
+# Alfa = 0.05
+# Współczynnik ufności 1 - alfa = 0.95
+# Wartości tablicowe dla chikwadrat: chi(0.99,25-1)=10.8563, chi(0.01,25-1)=42.9798
+wspChiKwadrat<-function(ufn,n){
+  return (qchisq(ufn,n-1))
+}
+#Granice przedziału ufności dla wariancji wagi owoców (w nowym systemie nawożenia)
+GranicaWar<-function(n,war,wspChi){
+  return(n*war/wspChi)
+}
+#Względna precyzja oszacowania
+wzgPrecyzjaWar<-function(dolnaGranica,gornaGranica,war){
+  return(0.5*((gornaGranica-dolnaGranica)/war))
+}
+
+#Współczynniki chiKwadrat dla: chi(0.99,24), chi(0.01,24)
+wspAlfa<-0.05
+ChiKwadrat1<-wspChiKwadrat(wspAlfa/2,liczba_nowa) #podajemy dokładną wartość, ponieważ zmniejszenie stopni swobody znajduje się wewnątrz ciała funkcji
+ChiKwadrat2<-wspChiKwadrat(1-(wspAlfa/2),liczba_nowa)
+
+#Przedział ufności dla nowego systemu nawożenia
+gornaGranicaNowa <- GranicaWar(liczba_nowa,wariancja_nowa,ChiKwadrat1)
+dolnaGranicaNowa <- GranicaWar(liczba_nowa,wariancja_nowa,ChiKwadrat2)
+
+gornaGranicaNowa <- sqrt(gornaGranicaNowa)
+dolnaGranicaNowa <- sqrt(dolnaGranicaNowa)
+# przedzial <8, 13>
+# odchylenie standardowe = 10, zawiera sie w przedziale
+
+#Precyzja oszacowania dla nowego systemu nawożenia
+precyzja_nowa <- wzgPrecyzjaWar(dolnaGranicaNowa,gornaGranicaNowa,wariancja_nowa)
+
+#zadanie 5
+
+statystyka <- function(x, y) {
+  # Funkcja zwraca wartość statystyki testowej dla porównania
+  # dwóch średnich z prób podanych jako argumenty
+  x.srednia <- mean(x)
+  x.wariancja <- var(x)
+  y.srednia <- mean(y)
+  y.wariancja <- var(y)
+  
+  U = (x.srednia - y.srednia) /
+    sqrt( (x.wariancja / length(x)) + (y.wariancja / length(y)) )
+  
+  return(U)
+}
+
+# Hipoteza zerowa: wartość wydajności pracy przy produkcji w starej hali są większe
+# Hipoteza alternatywna: wartość wydajności pracy przy produkcji w starej hali nie są większe
+
+wartosc.statystyki <- statystyka(nowa_hala, stara_hala)
+kwantyl95 <- qnorm(0.95)
+
+print(paste("Obszar przyjec statystyki: (",format(kwantyl95, digits=3), ", nieskonczonosc)"))
+print(paste("Obszar krytyczny statystyki: (-nieskonczonosc, ",format(kwantyl95, digits=3), ")"))
+print(paste("Wartosc statystyki testowej: ", format(wartosc.statystyki, digits=3)))
+
