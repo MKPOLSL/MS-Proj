@@ -4,8 +4,8 @@
 # zadania:
 - [x] 1.
 - [x] 2. *(prawie)*
-- [ ] 3.
-- [ ] 4.
-- [ ] 5.
+- [x] 3.
+- [x] 4.
+- [x] 5.
 
 ![treść](https://raw.githubusercontent.com/MKPOLSL/MS-Proj/master/msproj.jpg)
