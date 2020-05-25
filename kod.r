@@ -49,6 +49,17 @@ odchylenie_standardowe_stara <- sqrt(wariancja_stara)
 mediana_nowa <- median(nowa_hala)
 mediana_stara <- median(stara_hala)
 
+odch_przecietne_od_mediany_nowa <- 0
+odch_przecietne_od_mediany_stara <- 0
+for(val in nowa_hala)
+{
+  odch_przecietne_od_mediany_nowa <- odch_przecietne_od_mediany_nowa + abs(val-mediana_nowa)/liczba_nowa
+}
+for(val in stara_hala)
+{
+  odch_przecietne_od_mediany_stara <- odch_przecietne_od_mediany_stara + abs(val-mediana_stara)/liczba_stara
+}
+
 kwantyl_25_nowa <- quantile(nowa_hala, probs=(0.25))
 kwantyl_75_nowa <- quantile(nowa_hala, probs=(0.75))
 
