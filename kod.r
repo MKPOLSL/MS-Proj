@@ -229,8 +229,8 @@ precyzjaSred <- function(gg, dg, sr){
 }
 
 # Przedział ufności dla starej hali
-granica_dolna_stara <- dolnaGranicaSred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
-granica_gorna_stara <- gornaGranicaSred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
+granica_dolna_stara <- dolna_granica_sred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
+granica_gorna_stara <- gorna_granica_sred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
 # przedzial <46, 52>
 # srednia = 49 więc zawiera się w przedziale ufności
 
