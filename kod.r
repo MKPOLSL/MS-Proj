@@ -235,7 +235,7 @@ granica_gorna_stara <- gorna_granica_sred(srednia_stara, wspolczynnik_TStudenta(
 # srednia = 49 więc zawiera się w przedziale ufności
 
 # Precyzja oszacowania dla starej hali
-precyzja_stara <- precyzjaSred(granicaGornaStara, granicaDolnaStara, srednia_stara)
+precyzja_stara <- precyzjaSred(granica_gorna_stara, granica_dolna_stara, srednia_stara)
 
 # zadanie 4
 # Współczynnik ufności 1 - alfa = 0.95
