@@ -1,39 +1,37 @@
-
-
 kwantyl <- function(lista, q)
 {
-  pozycjaKwartyla = sum(lista$counts) * q
-  nIsk <- lista$counts   #liczebnosc skumulowana
+  pozycja_kwantyla = sum(lista$counts) * q
+  liczebnosc_skumulowana <- lista$counts   #liczebnosc skumulowana
   
   for(i in 1:length(lista$counts))
   {
-    nIsk[i] = sum(lista$counts[1:i])
+    liczebnosc_skumulowana[i] = sum(lista$counts[1:i])
   }
   
-  znaleziona = 0
+  znaleziona = FALSE
   pozycja = 1
-  while (znaleziona == 0)
+  while (!znaleziona)
   {
-    if (pozycjaKwartyla < nIsk[pozycja] )
-      znaleziona = 1
+    if (pozycja_kwantyla < liczebnosc_skumulowana[pozycja] )
+      znaleziona = TRUE
     else
       pozycja = pozycja + 1
   }
   
-  xI0 = lista$breaks[pozycja]       #dolna wartosc przedzialu z kwantylem
-  nIskminus1 = nIsk[pozycja-1]    #liczebnosc skumulowana przedzialu poprzedzajacego kwantyl
-  nI0 = lista$counts[pozycja]       #liczebnosc przedzialu z kwantylem
-  rozpietoscPrzedzialu = lista$breaks[pozycja+1] - lista$breaks[pozycja]
-  wynik = xI0 + ((pozycjaKwartyla - nIskminus1) * (rozpietoscPrzedzialu / nI0))
+  dolna_wart_przedzialu = lista$breaks[pozycja]       #dolna wartosc przedzialu z kwantylem
+  liczebnosc_skumulowana_poprzedzajacy = liczebnosc_skumulowana[pozycja-1]  
+  liczebnosc_przedzialu = lista$counts[pozycja]       #liczebnosc przedzialu z kwantylem
+  szerokosc_przedzialu = lista$breaks[pozycja+1] - lista$breaks[pozycja]
+  wynik = dolna_wart_przedzialu + ((pozycja_kwantyla - liczebnosc_skumulowana_poprzedzajacy) * (szerokosc_przedzialu / liczebnosc_przedzialu))
   return (wynik)
 }
 
 modalna_przedzial <- function(a) {
-  
+  dolna_granica <- a$breaks[which.max(a$counts)]
   najwieksza_liczebnosc <- max(a$counts)
-  liczebnosc_poprz <- stara_histogram$counts[which.max(a$counts) - 1]
-  liczebnosc_nastepn <- stara_histogram$counts[which.max(a$counts) + 1]
-  return(mod_stara + (najwieksza_liczebnosc-liczebnosc_poprz)/(2*najwieksza_liczebnosc - liczebnosc_poprz - liczebnosc_nastepn) * (a$breaks[which.max(a$counts) + 1]-a$breaks[which.max(a$counts)]))
+  liczebnosc_poprz <- a$counts[which.max(a$counts) - 1]
+  liczebnosc_nastepn <- a$counts[which.max(a$counts) + 1]
+  return(dolna_granica + (najwieksza_liczebnosc-liczebnosc_poprz)/(2*najwieksza_liczebnosc - liczebnosc_poprz - liczebnosc_nastepn) * (a$breaks[which.max(a$counts) + 1]-a$breaks[which.max(a$counts)]))
 }
 
 moment_centralny_przedzial <- function(lista, n) {
@@ -112,6 +110,11 @@ test_zgodnosci <- function(a){
     writeLines("Istnieją podstawy do odrzucenia hipotezy H0\n")
     writeLines("Dane nie mają rozkładu normalnego\n")
   }
+}
+
+precyzjaSred <- function(gg, dg, sr){
+  precyzjaOszacowaniaTrad = 0.5 * (gg - dg) / sr
+  return(precyzjaOszacowaniaTrad)
 }
 
 wspolczynnik_TStudenta <- function(ufn, n) {

@@ -68,8 +68,8 @@ wspolczynnik_zmiennosci_nowa <- (odchylenie_standardowe_nowa/srednia_nowa)*100
 
 #miary asymetrii i koncentracji 
 
-wspolczynnik_asymetrii_stara <- moment_centralny(stara_hala, 3) / odchylenie_standardowe_stara ^ 3 
-wspolczynnik_asymetrii_nowa <- moment_centralny(nowa_hala, 3) / odchylenie_standardowe_nowa ^ 3 
+skosnosc_stara <- moment_centralny(stara_hala, 3) / odchylenie_standardowe_stara ^ 3 
+skosnosc_nowa <- moment_centralny(nowa_hala, 3) / odchylenie_standardowe_nowa ^ 3 
 
 kurtoza_stara <- moment_centralny(stara_hala, 4) / odchylenie_standardowe_stara ^ 4
 kurtoza_nowa <- moment_centralny(nowa_hala, 4) / odchylenie_standardowe_nowa ^ 4
@@ -91,14 +91,15 @@ punkty_przeciecia_nowa = seq(min(nowa_hala), max(nowa_hala), szerokosc_nowa_hala
 stara_histogram <- hist(stara_hala, breaks = punkty_przeciecia_stara)
 nowa_histogram <- hist(nowa_hala, breaks = punkty_przeciecia_nowa)
 
+#miary polozenia
 suma_stara <- sum(stara_histogram$counts * stara_histogram$mids)
 suma_nowa <- sum(nowa_histogram$counts * nowa_histogram$mids)
 
 srednia_przedzial_stara <- suma_stara / sum(stara_histogram$counts)
 srednia_przedzial_nowa <- suma_nowa / sum(nowa_histogram$counts)
 
-mediana_stara_przedzial <- kwartyl(stara_histogram, 0.5)
-mediana_nowa_przedzial <- kwartyl(stara_histogram, 0.5)
+mediana_przedzial_stara <- kwantyl(stara_histogram, 0.5)
+mediana_przedzial_nowa <- kwantyl(nowa_histogram, 0.5)
 
 kwantyl_25_przedzial_stara <- kwantyl(stara_histogram, 0.25)
 kwantyl_75_przedzial_stara <- kwantyl(stara_histogram, 0.75)
@@ -109,14 +110,31 @@ kwantyl_75_przedzial_nowa <- kwantyl(nowa_histogram, 0.75)
 moda_stara_przedzial <- modalna_przedzial(stara_histogram) 
 moda_nowa_przedzial <- modalna_przedzial(nowa_histogram)
 
+#miary rozproszenia 
 wariancja_przedzial_stara <- moment_centralny_przedzial(stara_histogram, 2)
 wariancja_przedzial_nowa <- moment_centralny_przedzial(nowa_histogram, 2)
 
 odchylenie_standard_przedzial_stara <- sqrt(wariancja_przedzial_stara)
 odchylenie_standard_przedzial_nowa <- sqrt(wariancja_przedzial_nowa)
 
-wspolczynnik_asymetrii_stara_przedzialowy <- moment_centralny_przedzial(stara_histogram, 3) / odchylenie_standard_przedzial_stara ^ 3
-wspolczynnik_asymetrii_nowa_przedzialowy <- moment_centralny_przedzial(nowa_histogram, 3) / odchylenie_standard_przedzial_nowa ^ 3
+odch_przecietne_przedzial_stara <- sum(abs(stara_histogram$mids - srednia_przedzial_stara) * stara_histogram$counts) / sum(stara_histogram$counts)
+odch_przecietne_przedzial_nowa <- sum(abs(nowa_histogram$mids - srednia_przedzial_nowa) * nowa_histogram$counts) / sum(nowa_histogram$counts)
+
+odch_med_przedzial_stara <- sum(abs(stara_histogram$mids - mediana_przedzial_stara) * stara_histogram$counts) / sum(stara_histogram$counts)
+odch_med_przedzial_nowa <- sum(abs(nowa_histogram$mids - mediana_przedzial_nowa) * nowa_histogram$counts) / sum(nowa_histogram$counts)
+
+odchylenie_cwiartkowe_przedzial_stara <- (kwantyl_75_przedzial_stara - kwantyl_25_przedzial_stara)/2
+odchylenie_cwiartkowe_przedzial_nowa <- (kwantyl_75_przedzial_nowa - kwantyl_25_przedzial_nowa)/2
+
+wspolczynnik_pozycyjny_przedzial_stara <- (odchylenie_cwiartkowe_przedzial_stara/mediana_przedzial_stara)*100
+wspolczynnik_pozycyjny_przedzial_nowa <- (odchylenie_cwiartkowe_przedzial_nowa/mediana_przedzial_nowa)*100
+
+wspolczynnik_zmiennosci_przedzial_stara <- (odchylenie_standard_przedzial_stara/srednia_przedzial_stara)*100
+wspolczynnik_zmiennosci_przedzial_nowa <- (odchylenie_standard_przedzial_nowa/srednia_przedzial_nowa)*100
+
+#miary asymetrii i koncentracji
+skosnosc_stara_przedzialowy <- moment_centralny_przedzial(stara_histogram, 3) / odchylenie_standard_przedzial_stara ^ 3
+skosnosc_nowa_przedzialowy <- moment_centralny_przedzial(nowa_histogram, 3) / odchylenie_standard_przedzial_nowa ^ 3
 
 kurtoza_stara_przedzialowa <- moment_centralny_przedzial(stara_histogram, 4) / odchylenie_standard_przedzial_stara ^ 4
 kurtoza_nowa_przedzialowa <-  moment_centralny_przedzial(nowa_histogram, 4) / odchylenie_standard_przedzial_nowa ^ 4
@@ -219,10 +237,6 @@ if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyk
 # stąd alfa = 0.05
 
 # Względna precyzja oszacowania
-precyzjaSred <- function(gg, dg, sr){
-  precyzjaOszacowaniaTrad = 0.5 * (gg - dg) / sr
-  return(precyzjaOszacowaniaTrad)
-}
 
 # Przedział ufności dla starej hali
 granica_dolna_stara <- dolna_granica_sred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
