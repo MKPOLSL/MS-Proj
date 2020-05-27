@@ -3,67 +3,68 @@
 dane <- read.csv2("dane.csv", sep=";")
 stara_hala <- as.vector(dane[[1]], mode = "double")
 nowa_hala <- as.vector(dane[[2]], mode = "double")
-nowa_hala <- na.omit(nowa_hala)  #nie uwzglêdniaj NA
+nowa_hala <- na.omit(nowa_hala)  #nie uwzglÄ™dniaj NA
 
 source('funkcje.r')
 
-#miary po³o¿enia (szereg szczegó³ówy)
+#miary poÅ‚oÅ¼enia (szereg szczegÃ³Å‚Ã³wy)
 suma_stara <- sum(stara_hala)
-liczba_stara <- length(stara_hala)
-
 suma_nowa <- sum(nowa_hala)
+
+liczba_stara <- length(stara_hala)
 liczba_nowa <- length(nowa_hala)
 
 srednia_stara <- suma_stara / liczba_stara
 srednia_nowa <- suma_nowa / liczba_nowa
 
-mediana_nowa <- median(nowa_hala)
 mediana_stara <- median(stara_hala)
+mediana_nowa <- median(nowa_hala)
 
 moda_stara <- modalna(stara_hala)
 moda_nowa <- modalna(nowa_hala)
 
-kwantyl_25_nowa <- quantile(nowa_hala, probs=(0.25))
-kwantyl_75_nowa <- quantile(nowa_hala, probs=(0.75))
+kwantyl_25_stara <- quantile(stara_hala, probs=(0.25), names = FALSE)
+kwantyl_75_stara <- quantile(stara_hala, probs=(0.75), names = FALSE)
 
-kwantyl_25_stara <- quantile(stara_hala, probs=(0.25))
-kwantyl_75_stara <- quantile(stara_hala, probs=(0.75))
+kwantyl_25_nowa <- quantile(nowa_hala, probs=(0.25), names = FALSE)
+kwantyl_75_nowa <- quantile(nowa_hala, probs=(0.75), names = FALSE)
+
 
 #miary rozproszenia
-wariancja_nowa <- moment_centralny(nowa_hala, 2)
 wariancja_stara <- moment_centralny(stara_hala, 2)
+wariancja_nowa <- moment_centralny(nowa_hala, 2)
 
-odchylenie_standardowe_nowa <- sqrt(wariancja_nowa)
 odchylenie_standardowe_stara <- sqrt(wariancja_stara)
+odchylenie_standardowe_nowa <- sqrt(wariancja_nowa)
 
-odch_przecietne_nowa <- 0
 odch_przecietne_stara <- 0
+odch_przecietne_nowa <- 0
 
-for(val in nowa_hala){
-  odch_przecietne_nowa <- odch_przecietne_nowa + abs(val-srednia_nowa)/liczba_nowa
-}
 for(val in stara_hala){
   odch_przecietne_stara <- odch_przecietne_stara + abs(val-srednia_stara)/liczba_stara
 }
-
-odch_przecietne_od_mediany_nowa <- 0
-odch_przecietne_od_mediany_stara <- 0
-
 for(val in nowa_hala){
-  odch_przecietne_od_mediany_nowa <- odch_przecietne_od_mediany_nowa + abs(val-mediana_nowa)/liczba_nowa
+  odch_przecietne_nowa <- odch_przecietne_nowa + abs(val-srednia_nowa)/liczba_nowa
 }
+
+odch_przecietne_od_mediany_stara <- 0
+odch_przecietne_od_mediany_nowa <- 0
+
 for(val in stara_hala){
   odch_przecietne_od_mediany_stara <- odch_przecietne_od_mediany_stara + abs(val-mediana_stara)/liczba_stara
 }
+for(val in nowa_hala){
+  odch_przecietne_od_mediany_nowa <- odch_przecietne_od_mediany_nowa + abs(val-mediana_nowa)/liczba_nowa
+}
 
-odchylenie_cwiartkowe_nowa <- (kwantyl_75_nowa - kwantyl_25_nowa)/2
 odchylenie_cwiartkowe_stara <- (kwantyl_75_stara - kwantyl_25_stara)/2
+odchylenie_cwiartkowe_nowa <- (kwantyl_75_nowa - kwantyl_25_nowa)/2
 
-wspolczynnik_pozycyjny_nowa <- (odchylenie_cwiartkowe_nowa/mediana_nowa)*100
 wspolczynnik_pozycyjny_stara <- (odchylenie_cwiartkowe_stara/mediana_stara)*100
+wspolczynnik_pozycyjny_nowa <- (odchylenie_cwiartkowe_nowa/mediana_nowa)*100
 
-wspolczynnik_zmiennosci_nowa <- (odchylenie_standardowe_nowa/srednia_nowa)*100
 wspolczynnik_zmiennosci_stara <- (odchylenie_standardowe_stara/srednia_stara)*100
+wspolczynnik_zmiennosci_nowa <- (odchylenie_standardowe_nowa/srednia_nowa)*100
 
 #miary asymetrii i koncentracji 
 
@@ -77,18 +78,18 @@ eksces_stara = kurtoza_stara - 3
 eksces_nowa = kurtoza_nowa - 3
 
 
-#szereg przedzia³owy
+#szereg przedziaÅ‚owy
 
-# Szerokoœæ przedzia³u klasowego
-szerokosc_stara_hala <- (max(stara_hala) - min(stara_hala)) / ceiling((sqrt(liczba_stara)))
-szerokosc_nowa_hala <- (max(nowa_hala) - min(nowa_hala)) /  ceiling((sqrt(liczba_nowa)))
+# SzerokoÅ›Ä‡ przedziaÅ‚u klasowego
+szerokosc_stara_hala <- (max(stara_hala) - min(stara_hala)) / ceiling(sqrt(liczba_stara))
+szerokosc_nowa_hala <- (max(nowa_hala) - min(nowa_hala)) /  ceiling(sqrt(liczba_nowa) + 1)
 
-# Punkty przeciêcia
+# Punkty przeciÄ™cia
 punkty_przeciecia_stara = seq(min(stara_hala), max(stara_hala), szerokosc_stara_hala)
 punkty_przeciecia_nowa = seq(min(nowa_hala), max(nowa_hala), szerokosc_nowa_hala)
 
-nowa_histogram <- hist(nowa_hala, breaks = punkty_przeciecia_nowa)
 stara_histogram <- hist(stara_hala, breaks = punkty_przeciecia_stara)
+nowa_histogram <- hist(nowa_hala, breaks = punkty_przeciecia_nowa)
 
 suma_stara <- sum(stara_histogram$counts * stara_histogram$mids)
 suma_nowa <- sum(nowa_histogram$counts * nowa_histogram$mids)
@@ -96,17 +97,32 @@ suma_nowa <- sum(nowa_histogram$counts * nowa_histogram$mids)
 srednia_przedzial_stara <- suma_stara / sum(stara_histogram$counts)
 srednia_przedzial_nowa <- suma_nowa / sum(nowa_histogram$counts)
 
-wariancja_przedzial_stara = sum(((stara_histogram$mids-srednia_przedzial_stara) ^ 2) * stara_histogram$counts) / sum(stara_histogram$counts)
-wariancja_przedzial_nowa = sum(((nowa_histogram$mids-srednia_przedzial_nowa) ^ 2) * nowa_histogram$counts) / sum(nowa_histogram$counts)
+mediana_stara_przedzial <- kwartyl(stara_histogram, 0.5)
+mediana_nowa_przedzial <- kwartyl(stara_histogram, 0.5)
 
-wspolczynnik_asymetrii_nowa_przedzialowy = (sum((nowa_histogram$mids - srednia_nowa) ^ 3 * nowa_histogram$counts) / sum(nowa_histogram$counts)) / (odchylenie_standardowe_nowa ^ 3)
-wspolczynnik_asymetrii_stara_przedzialowy = (sum((stara_histogram$mids - srednia_stara) ^ 3 * stara_histogram$counts) / sum(stara_histogram$counts)) / (odchylenie_standardowe_stara ^ 3)
+kwantyl_25_przedzial_stara <- kwantyl(stara_histogram, 0.25)
+kwantyl_75_przedzial_stara <- kwantyl(stara_histogram, 0.75)
 
-kurtoza_stara_przedzialowa = (sum((stara_histogram$mids - srednia_przedzial_stara) ^ 4 * stara_histogram$counts) / sum(stara_histogram$counts)) / (odchylenie_standardowe_stara ^ 4)
-kurtoza_nowa_przedzialowa =  (sum((nowa_histogram$mids - srednia_przedzial_nowa) ^ 4 * nowa_histogram$counts) / sum(nowa_histogram$counts)) / (odchylenie_standardowe_nowa ^ 4)
+kwantyl_25_przedzial_nowa <- kwantyl(nowa_histogram, 0.25)
+kwantyl_75_przedzial_nowa <- kwantyl(nowa_histogram, 0.75)
 
-eksces_stara_przedzialowy = kurtoza_stara_przedzialowa - 3
-eksces_nowa_przedzialowy = kurtoza_nowa_przedzialowa - 3
+moda_stara_przedzial <- modalna_przedzial(stara_histogram) 
+moda_nowa_przedzial <- modalna_przedzial(nowa_histogram)
+
+wariancja_przedzial_stara <- moment_centralny_przedzial(stara_histogram, 2)
+wariancja_przedzial_nowa <- moment_centralny_przedzial(nowa_histogram, 2)
+
+odchylenie_standard_przedzial_stara <- sqrt(wariancja_przedzial_stara)
+odchylenie_standard_przedzial_nowa <- sqrt(wariancja_przedzial_nowa)
+
+wspolczynnik_asymetrii_stara_przedzialowy <- moment_centralny_przedzial(stara_histogram, 3) / odchylenie_standard_przedzial_stara ^ 3
+wspolczynnik_asymetrii_nowa_przedzialowy <- moment_centralny_przedzial(nowa_histogram, 3) / odchylenie_standard_przedzial_nowa ^ 3
+
+kurtoza_stara_przedzialowa <- moment_centralny_przedzial(stara_histogram, 4) / odchylenie_standard_przedzial_stara ^ 4
+kurtoza_nowa_przedzialowa <-  moment_centralny_przedzial(nowa_histogram, 4) / odchylenie_standard_przedzial_nowa ^ 4
+
+eksces_stara_przedzialowy <- kurtoza_stara_przedzialowa - 3
+eksces_nowa_przedzialowy <- kurtoza_nowa_przedzialowa - 3
 
 
 #ZADANIE 2
@@ -137,12 +153,12 @@ for(i in nowa_hala)
 #dystrybuanta rozkladu hipotetycznego starej
 dystrybuanta_hipotetyczna_stara<-dane_stara
 for(i in stara_hala) {
-  dystrybuanta_hipotetyczna_stara[i] <- pnorm(standaryzacja_stara[i]) #pnorm zwraca funkcjê dystrybuanty
+  dystrybuanta_hipotetyczna_stara[i] <- pnorm(standaryzacja_stara[i]) #pnorm zwraca funkcjÄ™ dystrybuanty
 }
 
 dystrybuanta_hipotetyczna_nowa<-dane_nowa
 for(i in nowa_hala) {
-  dystrybuanta_hipotetyczna_nowa[i] <- pnorm(standaryzacja_nowa[i]) #pnorm zwraca funkcjê dystrybuanty
+  dystrybuanta_hipotetyczna_nowa[i] <- pnorm(standaryzacja_nowa[i]) #pnorm zwraca funkcjÄ™ dystrybuanty
 }
 print(dystrybuanta_hipotetyczna_nowa)
 
@@ -199,33 +215,33 @@ if(wartosc_statystyki_testowej_nowa < tablica_rozkladu_nowa || wartosc_statystyk
 #y <- test_zgodnosci(nowa_hala)
 
 # ZADANIE 3
-# Wspó³czynnik ufnoœci 1 - alfa = 0.95
-# st¹d alfa = 0.05
+# WspÃ³Å‚czynnik ufnoÅ›ci 1 - alfa = 0.95
+# stÄ…d alfa = 0.05
 
-# Wzglêdna precyzja oszacowania
+# WzglÄ™dna precyzja oszacowania
 precyzjaSred <- function(gg, dg, sr){
   precyzjaOszacowaniaTrad = 0.5 * (gg - dg) / sr
   return(precyzjaOszacowaniaTrad)
 }
 
-# Przedzia³ ufnoœci dla starej hali
+# PrzedziaÅ‚ ufnoÅ›ci dla starej hali
 granica_dolna_stara <- dolna_granica_sred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
 granica_gorna_stara <- gorna_granica_sred(srednia_stara, wspolczynnik_TStudenta(0.95, liczba_stara), odchylenie_standardowe_stara, liczba_stara)
 # przedzial <46, 52>
-# srednia = 49 wiêc zawiera siê w przedziale ufnoœci
+# srednia = 49 wiÄ™c zawiera siÄ™ w przedziale ufnoÅ›ci
 
 # Precyzja oszacowania dla starej hali
 precyzja_stara <- precyzjaSred(granica_gorna_stara, granica_dolna_stara, srednia_stara)
 
 # zadanie 4
-# Wspó³czynnik ufnoœci 1 - alfa = 0.95
+# WspÃ³Å‚czynnik ufnoÅ›ci 1 - alfa = 0.95
 
-#Wspó³czynniki chiKwadrat dla: chi(0.975,42), chi(0.025,42)
+#WspÃ³Å‚czynniki chiKwadrat dla: chi(0.975,42), chi(0.025,42)
 wspAlfa<-0.05
 ChiKwadrat1<-wspChiKwadrat(wspAlfa/2,liczba_nowa) 
 ChiKwadrat2<-wspChiKwadrat(1-(wspAlfa/2),liczba_nowa)
 
-#Przedzia³ ufnoœci dla nowej hali
+#PrzedziaÅ‚ ufnoÅ›ci dla nowej hali
 gornaGranicaNowa <- granica_wariancja(liczba_nowa,wariancja_nowa,ChiKwadrat1)
 dolnaGranicaNowa <- granica_wariancja(liczba_nowa,wariancja_nowa,ChiKwadrat2)
 
@@ -239,8 +255,8 @@ precyzja_nowa <- wzgledna_precyzja_wariancja(dolnaGranicaNowa,gornaGranicaNowa,w
 
 #zadanie 5
 
-# Hipoteza zerowa: wartoœæ wydajnoœci pracy przy produkcji w starej hali s¹ wiêksze
-# Hipoteza alternatywna: wartoœæ wydajnoœci pracy przy produkcji w starej hali nie s¹ wiêksze
+# Hipoteza zerowa: wartoÅ›Ä‡ wydajnoÅ›ci pracy przy produkcji w starej hali sÄ… wiÄ™ksze
+# Hipoteza alternatywna: wartoÅ›Ä‡ wydajnoÅ›ci pracy przy produkcji w starej hali nie sÄ… wiÄ™ksze
 
 wartosc.statystyki <- statystyka(nowa_hala, stara_hala)
 kwantyl95 <- qnorm(0.95)
