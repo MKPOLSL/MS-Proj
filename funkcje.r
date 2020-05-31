@@ -92,7 +92,7 @@ test_zgodnosci<-function(hala)
   #dystrybuanta rozkladu hipotetycznego starej
   dystrybuanta_hipotetyczna<-dane
   for(i in hala) {
-    dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcj� dystrybuanty
+    dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcję dystrybuanty
   }
   
   #dystrybuanta empiryczna starej
@@ -128,15 +128,15 @@ test_zgodnosci<-function(hala)
 #koniec zadania drugiego
 
 precyzjaSred <- function(gg, dg, sr){
-  precyzjaOszacowaniaTrad = 0.5 * (gg - dg) / sr
-  return(precyzjaOszacowaniaTrad)
+  precyzja_oszacowania = 0.5 * (gg - dg) / sr
+  return(precyzja_oszacowania)
 }
 
 wspolczynnik_TStudenta <- function(ufn, n) {
   return(qt((1 - ufn) / 2, n - 1, lower.tail = FALSE, log.p = FALSE))
 }
 
-# Przedział ufności dla średniej
+# PrzedziaĹ‚ ufnoĹ›ci dla Ĺ›redniej
 dolna_granica_sred <- function(srednia, wspT, odch, licz) {
   dolna_granica = srednia - wspT * (odch / sqrt(licz - 1))
   return(dolna_granica)
@@ -150,18 +150,18 @@ gorna_granica_sred <- function(srednia, wspT, odch, licz) {
 wspChiKwadrat<-function(ufn,n){
   return (qchisq(ufn,n-1))
 }
-#Granice przedziału ufności dla wariancji wartości pracy nowej hali
+#Granice przedziaĹ‚u ufnoĹ›ci dla wariancji wartoĹ›ci pracy nowej hali
 granica_wariancja<-function(n,war,wspChi){
   return(n*war/wspChi)
 }
-#Względna precyzja oszacowania
+#WzglÄ™dna precyzja oszacowania
 wzgledna_precyzja_wariancja <- function(dolnaGranica,gornaGranica,war){
   return(0.5*((gornaGranica-dolnaGranica)/war))
 }
 
 statystyka <- function(x, y) {
-  # Funkcja zwraca wartość statystyki testowej dla porównania
-  # dwóch średnich z prób podanych jako argumenty
+  # Funkcja zwraca wartoĹ›Ä‡ statystyki testowej dla porĂłwnania
+  # dwĂłch Ĺ›rednich z prĂłb podanych jako argumenty
   x.srednia <- mean(x)
   x.wariancja <- var(x)
   y.srednia <- mean(y)
