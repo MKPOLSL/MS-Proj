@@ -63,54 +63,69 @@ modalna <- function(a) {
   wynik[which.max(tabulate(match(a, wynik)))]
 }
 
-#kod zajebany
-test_zgodnosci <- function(a){
-  # Sortowanie danych
-  dane<-sort(a)
+#test sgodnosci kolmogorowa-lileforsa
+# zadanie 2
+test_zgodnosci<-function(hala)
+{
+  #wartosci potrzebne w dalszej czesci testu
   
-  # Zmienne i wektory
-  standaryzacja <- dane
-  dystrybuanta_empiryczna <- dane
-  dystrybuanta_hipotetyczna <-dane
-  roznica <- dane
-  tablica_rozkladu = 0.264 # Statystyka z tablicy rozkładu Kołmogorowa
   
-  # Standaryzacja
-  for(i in 1:length(a)) {
-    standaryzacja[i] <- (dane[i]-sredniaa)/odchStanda
+  tablica_rozkladu<-sqrt(length(hala))
+  srednia=sum(hala)/length(hala)
+  #odchyenie standardowe
+  wariancja <- 0
+  for(val in hala)
+  {
+    wariancja <- wariancja + (val-srednia)^2/length(hala)
+  }
+  odchylenie_standardowe <- sqrt(wariancja)
+  
+  #sortowansko starej i nowej 
+  dane <-sort(hala)
+  #standaryzacja starej
+  standaryzacja<-dane
+  for(i in hala)
+  {
+    standaryzacja[i]<-(dane[i]-srednia)/odchylenie_standardowe
   }
   
-  # Dystrybuanta rozkładu hipotetycznego
-  for(i in 1:length(a)) {
-    dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcję dystrybuanty
+  #dystrybuanta rozkladu hipotetycznego starej
+  dystrybuanta_hipotetyczna<-dane
+  for(i in hala) {
+    dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcj� dystrybuanty
   }
   
-  # Dystrybuanta empiryczna
-  for(i in 1:length(a)) {
-    dystrybuanta_empiryczna[i] <- i/length(a)
+  #dystrybuanta empiryczna starej
+  dystrybuanta_empiryczna<-dane
+  
+  for(i in hala) {
+    dystrybuanta_empiryczna[i] <- i/length(hala)
   }
   
-  # Różnica dystrybuant
-  for(i in 1:length(a)) {
+  # roznica dystrybuant
+  roznica<-0
+  for(i in hala) {
     roznica[i] <- abs(dystrybuanta_hipotetyczna[i] - dystrybuanta_empiryczna[i])
   }
   
-  # Wartość statystyki testowej
-  wartosc_statystyki_testowej <- max(roznica)
+  # Wartosc statystyki testowej
+  wartosc_statystyki_testowej <- max(roznica,na.rm=TRUE)
   
+  writeLines("H0 - rozklad normalny\n")
+  writeLines("H1 - brak rozkladu normalnego\n")
   
-  writeLines("H0 - rozkład normalny\n")
-  writeLines("H1 - brak rozkładu normalnego\n")
-  
-  writeLines("dla aycyjnego systemu:\n")
+  writeLines("dla starej hali rozklad normalny:\n")
   if(wartosc_statystyki_testowej < tablica_rozkladu || wartosc_statystyki_testowej> 1){
     writeLines("Brak podstaw do odrzucenia hipotezy H0\n")
-    writeLines("Dane mają rozkład normalny\n")
+    writeLines("Dane maja rozklad normalny\n")
   }else{
-    writeLines("Istnieją podstawy do odrzucenia hipotezy H0\n")
-    writeLines("Dane nie mają rozkładu normalnego\n")
+    writeLines("Istnieja podstawy do odrzucenia hipotezy H0\n")
+    writeLines("Dane nie maja rozkladu normalnego\n")
   }
+  
 }
+
+#koniec zadania drugiego
 
 precyzjaSred <- function(gg, dg, sr){
   precyzjaOszacowaniaTrad = 0.5 * (gg - dg) / sr
