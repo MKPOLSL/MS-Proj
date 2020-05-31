@@ -17,6 +17,7 @@ kwantyl <- function(lista, q)
     else
       pozycja = pozycja + 1
   }
+  #pies
   
   dolna_wart_przedzialu = lista$breaks[pozycja]       #dolna wartosc przedzialu z kwantylem
   liczebnosc_skumulowana_poprzedzajacy = liczebnosc_skumulowana[pozycja-1]  
