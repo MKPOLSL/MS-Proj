@@ -157,4 +157,5 @@ statystyka <- function(x, y) {
   
   return(U)
 }
-#koniec kodu zajebanego
+
+
