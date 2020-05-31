@@ -17,7 +17,6 @@ kwantyl <- function(lista, q)
     else
       pozycja = pozycja + 1
   }
-  #pies
   
   dolna_wart_przedzialu = lista$breaks[pozycja]       #dolna wartosc przedzialu z kwantylem
   liczebnosc_skumulowana_poprzedzajacy = liczebnosc_skumulowana[pozycja-1]  
@@ -84,8 +83,8 @@ granica_wariancja<-function(n,war,wspChi){
   return(n*war/wspChi)
 }
 #Wzgledna precyzja oszacowania
-wzgledna_precyzja_wariancja <- function(dolna_granica,gorna_granica,war){
-  return((0.5 * (gorna_granica - dolna_granica) / war) * 100)
+wzgledna_precyzja_wariancja <- function(dolna_granica,gorna_granica,wariancja){
+  return((0.5 * (gorna_granica - dolna_granica) / wariancja) * 100)
 }
 
 statystyka <- function(x, y) {
@@ -96,9 +95,10 @@ statystyka <- function(x, y) {
   y.srednia <- mean(y)
   y.wariancja <- var(y)
   
-  U = (x.srednia - y.srednia) / sqrt( (x.wariancja / length(x)) + (y.wariancja / length(y)) )
+  U = (x.srednia - y.srednia) / sqrt((x.wariancja / length(x)) + (y.wariancja / length(y)))
   
   return(U)
 }
+
 
 
