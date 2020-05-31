@@ -56,77 +56,8 @@ moment_centralny <- function(a, n) {
   return(wynik)
 }
 
-modalna <- function(a) {
-  wynik <- unique(a)
-  wynik[which.max(tabulate(match(a, wynik)))]
-}
-
-#test zgodnosci kolmogorowa-lileforsa
-# zadanie 2
-test_zgodnosci<-function(hala)
-{
-  #wartosci potrzebne w dalszej czesci testu
-  
-  
-  tablica_rozkladu<-sqrt(length(hala))
-  srednia=sum(hala)/length(hala)
-  #odchyenie standardowe
-  wariancja <- 0
-  for(val in hala)
-  {
-    wariancja <- wariancja + (val-srednia)^2/length(hala)
-  }
-  odchylenie_standardowe <- sqrt(wariancja)
-  
-  #sortowanie starej i nowej 
-  dane <-sort(hala)
-  #standaryzacja starej
-  standaryzacja<-dane
-  for(i in hala)
-  {
-    standaryzacja[i]<-(dane[i]-srednia)/odchylenie_standardowe
-  }
-  
-  #dystrybuanta rozkladu hipotetycznego starej
-  dystrybuanta_hipotetyczna<-dane
-  for(i in hala) {
-    dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcję dystrybuanty
-  }
-  
-  #dystrybuanta empiryczna starej
-  dystrybuanta_empiryczna<-dane
-  
-  for(i in hala) {
-    dystrybuanta_empiryczna[i] <- i/length(hala)
-  }
-  
-  # roznica dystrybuant
-  roznica<-0
-  for(i in hala) {
-    roznica[i] <- abs(dystrybuanta_hipotetyczna[i] - dystrybuanta_empiryczna[i])
-  }
-  
-  # Wartosc statystyki testowej
-  wartosc_statystyki_testowej <- max(roznica,na.rm=TRUE)
-  
-  writeLines("H0 - rozklad normalny\n")
-  writeLines("H1 - brak rozkladu normalnego\n")
-  
-  writeLines("dla starej hali rozklad normalny:\n")
-  if(wartosc_statystyki_testowej < tablica_rozkladu || wartosc_statystyki_testowej> 1){
-    writeLines("Brak podstaw do odrzucenia hipotezy H0\n")
-    writeLines("Dane maja rozklad normalny\n")
-  }else{
-    writeLines("Istnieja podstawy do odrzucenia hipotezy H0\n")
-    writeLines("Dane nie maja rozkladu normalnego\n")
-  }
-  
-}
-
-#koniec zadania drugiego
-
-precyzjaSred <- function(gg, dg, sr){
-  precyzja_oszacowania = 0.5 * (gg - dg) / sr
+precyzja_oszacowania <- function(gorna_granica, dolna_granica, srednia){
+  precyzja_oszacowania = 0.5 * (gorna_granica - dolna_granica) / srednia
   return(precyzja_oszacowania)
 }
 
@@ -140,8 +71,8 @@ dolna_granica_sred <- function(srednia, wspT, odch, licz) {
   return(dolna_granica)
 }
 
-gorna_granica_sred <- function(srednia, wspT, odch, licz) {
-  gorna_granica = srednia + wspT * (odch / sqrt(licz - 1))
+gorna_granica_sred <- function(srednia, wspT, odch, liczba) {
+  gorna_granica = srednia + wspT * (odch / sqrt(liczba - 1))
   return(gorna_granica)
 }
 
@@ -165,8 +96,7 @@ statystyka <- function(x, y) {
   y.srednia <- mean(y)
   y.wariancja <- var(y)
   
-  U = (x.srednia - y.srednia) /
-    sqrt( (x.wariancja / length(x)) + (y.wariancja / length(y)) )
+  U = (x.srednia - y.srednia) / sqrt( (x.wariancja / length(x)) + (y.wariancja / length(y)) )
   
   return(U)
 }
