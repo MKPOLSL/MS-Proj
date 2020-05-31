@@ -148,7 +148,7 @@ Zadanie3 <- function(hala){
   print(paste("Srednia: ",format(srednia, digits=3)))
   if(srednia < granica_gorna & srednia > granica_dolna){
     print("Srednia zawiera sie w przedziale ufnosci, mamy podstawy do uogolniania przedzialu ufnosci na cala populacje")
-  } else print("Srednia nie zawiera sie w przedziale ufnosci, nie mamy podstaw do uogolniania przedzialu ufnosci na cala populacje")
+  } else print("Srednia nie zawiera sie w przedziale ufnosci, nie mamy pods````````````````````````````taw do uogolniania przedzialu ufnosci na cala populacje")
   # Precyzja oszacowania dla starej hali
   precyzja <- precyzja_oszacowania(granica_gorna, granica_dolna, srednia)
   print(paste("Wzgledna precyzja oszacowania: ", format(precyzja, digits=3)))
@@ -189,7 +189,7 @@ Zadanie5 <- function(stara_hala, nowa_hala)
   # Hipoteza zerowa: wartość wydajności pracy przy produkcji w starej hali są większe
   # Hipoteza alternatywna: wartość wydajności pracy przy produkcji w starej hali nie są większe
   
-  wartosc_statystyki <- statystyka(nowa_hala, stara_hala)
+  wartosc_statystyki <- statystyka(stara_hala, nowa_hala)
   kwantyl975 <- qnorm(0.975)
   
   print(paste("Obszar przyjec statystyki: (",format(kwantyl975, digits=3), ", nieskonczonosc)"))
