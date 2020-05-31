@@ -145,8 +145,6 @@ eksces_nowa_przedzialowy <- kurtoza_nowa_przedzialowa - 3
 
 #ZADANIE 2
 
-#prosze uprzejmie sprawdzic czy zmiennatablica rozkladu jest dobrze policzona 
-
 
 #koniec zadania 2
 x <- test_zgodnosci(stara_hala)

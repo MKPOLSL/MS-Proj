@@ -63,7 +63,7 @@ modalna <- function(a) {
   wynik[which.max(tabulate(match(a, wynik)))]
 }
 
-#test sgodnosci kolmogorowa-lileforsa
+#test zgodnosci kolmogorowa-lileforsa
 # zadanie 2
 test_zgodnosci<-function(hala)
 {
@@ -80,7 +80,7 @@ test_zgodnosci<-function(hala)
   }
   odchylenie_standardowe <- sqrt(wariancja)
   
-  #sortowansko starej i nowej 
+  #sortowanie starej i nowej 
   dane <-sort(hala)
   #standaryzacja starej
   standaryzacja<-dane
