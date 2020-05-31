@@ -37,8 +37,6 @@ modalna_przedzial <- function(a) {
 moment_centralny_przedzial <- function(lista, n) {
   suma <- sum(lista$counts * lista$mids)
   srednia <- suma / sum(lista$counts)
-  print(suma)
-  print(srednia)
   wynik <- 0
   for(i in 1:length(lista$counts)){
     wynik <- wynik + ((lista$mids[i] - srednia) ^ n * lista$counts[i])
@@ -136,7 +134,7 @@ wspolczynnik_TStudenta <- function(ufn, n) {
   return(qt((1 - ufn) / 2, n - 1, lower.tail = FALSE, log.p = FALSE))
 }
 
-# PrzedziaĹ‚ ufnoĹ›ci dla Ĺ›redniej
+# Przedzialy ufnosci dla sredniej
 dolna_granica_sred <- function(srednia, wspT, odch, licz) {
   dolna_granica = srednia - wspT * (odch / sqrt(licz - 1))
   return(dolna_granica)
@@ -150,18 +148,18 @@ gorna_granica_sred <- function(srednia, wspT, odch, licz) {
 wspChiKwadrat<-function(ufn,n){
   return (qchisq(ufn,n-1))
 }
-#Granice przedziaĹ‚u ufnoĹ›ci dla wariancji wartoĹ›ci pracy nowej hali
+#Granice przedzialu ufnosci dla wariancji wartsci pracy nowej hali
 granica_wariancja<-function(n,war,wspChi){
   return(n*war/wspChi)
 }
-#WzglÄ™dna precyzja oszacowania
+#Wzgledna precyzja oszacowania
 wzgledna_precyzja_wariancja <- function(dolnaGranica,gornaGranica,war){
   return(0.5*((gornaGranica-dolnaGranica)/war))
 }
 
 statystyka <- function(x, y) {
-  # Funkcja zwraca wartoĹ›Ä‡ statystyki testowej dla porĂłwnania
-  # dwĂłch Ĺ›rednich z prĂłb podanych jako argumenty
+  # Funkcja zwraca wartosc statystyki testowej dla porownania
+  # dwoch srednich z prob podanych jako argumenty
   x.srednia <- mean(x)
   x.wariancja <- var(x)
   y.srednia <- mean(y)
