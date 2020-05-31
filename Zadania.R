@@ -150,7 +150,7 @@ Zadanie3 <- function(hala){
     print("Srednia zawiera sie w przedziale ufnosci, mamy podstawy do uogolniania przedzialu ufnosci na cala populacje")
   } else print("Srednia nie zawiera sie w przedziale ufnosci, nie mamy podstaw do uogolniania przedzialu ufnosci na cala populacje")
   # Precyzja oszacowania dla starej hali
-  precyzja <- precyzjaSred(granica_gorna, granica_dolna, srednia)
+  precyzja <- precyzja_oszacowania(granica_gorna, granica_dolna, srednia)
   print(paste("Wzgledna precyzja oszacowania: ", format(precyzja, digits=3)))
 }
 
