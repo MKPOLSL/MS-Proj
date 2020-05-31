@@ -57,8 +57,7 @@ moment_centralny <- function(a, n) {
 }
 
 precyzja_oszacowania <- function(gorna_granica, dolna_granica, srednia){
-  precyzja_oszacowania = 0.5 * (gorna_granica - dolna_granica) / srednia
-  return(precyzja_oszacowania)
+  return((0.5 * (gorna_granica - dolna_granica) / srednia) * 100)
 }
 
 wspolczynnik_TStudenta <- function(ufn, n) {
@@ -84,8 +83,8 @@ granica_wariancja<-function(n,war,wspChi){
   return(n*war/wspChi)
 }
 #Wzgledna precyzja oszacowania
-wzgledna_precyzja_wariancja <- function(dolnaGranica,gornaGranica,war){
-  return(0.5*((gornaGranica-dolnaGranica)/war))
+wzgledna_precyzja_wariancja <- function(dolna_granica,gorna_granica,war){
+  return((0.5 * (gorna_granica - dolna_granica) / war) * 100)
 }
 
 statystyka <- function(x, y) {
