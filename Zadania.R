@@ -86,7 +86,7 @@ Zadanie2 <- function(hala){
   tablica_rozkladu<-sqrt(length(hala))
   srednia=sum(hala)/length(hala)
   
-  #odchyenie standardowe
+  #odchylenie standardowe
   wariancja <- 0
   for(val in hala){
     wariancja <- wariancja + (val-srednia)^2/length(hala)
