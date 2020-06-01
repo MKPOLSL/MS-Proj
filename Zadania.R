@@ -83,9 +83,9 @@ Zadanie1_przedzialowy <- function(hala){
 Zadanie2 <- function(hala){
   #wartosci potrzebne w dalszej czesci testu
   
-  
   tablica_rozkladu<-sqrt(length(hala))
   srednia=sum(hala)/length(hala)
+  
   #odchyenie standardowe
   wariancja <- 0
   for(val in hala){
@@ -93,21 +93,22 @@ Zadanie2 <- function(hala){
   }
   odchylenie_standardowe <- sqrt(wariancja)
   
-  #sortowanie starej i nowej 
+  #sortowanie 
   dane <-sort(hala)
-  #standaryzacja starej
+  
+  #standaryzacja 
   standaryzacja<-dane
   for(i in hala){
     standaryzacja[i]<-(dane[i]-srednia)/odchylenie_standardowe
   }
   
-  #dystrybuanta rozkladu hipotetycznego starej
+  #dystrybuanta rozkladu hipotetycznego 
   dystrybuanta_hipotetyczna<-dane
   for(i in hala) {
     dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcję dystrybuanty
   }
   
-  #dystrybuanta empiryczna starej
+  #dystrybuanta empiryczna
   dystrybuanta_empiryczna<-dane
   
   for(i in hala) {
