@@ -190,7 +190,7 @@ Zadanie5 <- function(stara_hala, nowa_hala)
   kwantyl975 <- qnorm(0.975)
   
   print(paste("Obszar przyjec statystyki: (",format(kwantyl975, digits=3), ", nieskonczonosc)"))
-  print(paste("Obszar krytyczny statystyki: (-nieskonczonosc, ",format(kwantyl975, digits=3), ")"))
+  print(paste("Obszar krytyczny statystyki: (-nieskonczonosc, ",format(kwantyl975, digits=3), "]"))
   print(paste("Wartosc statystyki testowej: ", format(wartosc_statystyki, digits=3)))
   if(wartosc_statystyki < kwantyl975){
     print("Istnieja podstawy do odrzucenia hipotezy zerowej")
