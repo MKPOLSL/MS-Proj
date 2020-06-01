@@ -12,11 +12,11 @@ source('Zadania.r')
 
 nowa_hala_szczegolowy <- Zadanie1_szczegolowy(nowa_hala)
 stara_hala_szczegolowy <- Zadanie1_szczegolowy(stara_hala)
-nowa_hala_przedzialowy <- Zadanie1_przedzialowy(nowa_hala, ceiling(sqrt(length(nowa_hala))+1))
-stara_hala_przedzialowy <- Zadanie1_przedzialowy(stara_hala, ceiling(sqrt(length(stara_hala))))
+nowa_hala_przedzialowy <- Zadanie1_przedzialowy(nowa_hala)
+stara_hala_przedzialowy <- Zadanie1_przedzialowy(stara_hala)
 print(nowa_hala_szczegolowy)
-print(stara_hala_szczegolowy)
 print(nowa_hala_przedzialowy)
+print(stara_hala_szczegolowy)
 print(stara_hala_przedzialowy)
 
 #ZADANIE 2

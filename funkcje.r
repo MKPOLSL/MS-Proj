@@ -101,4 +101,3 @@ statystyka <- function(x, y) {
 }
 
 
-
