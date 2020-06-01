@@ -87,11 +87,7 @@ Zadanie2 <- function(hala){
   srednia=sum(hala)/length(hala)
   
   #odchylenie standardowe
-  wariancja <- 0
-  for(val in hala){
-    wariancja <- wariancja + (val-srednia)^2/length(hala)
-  }
-  odchylenie_standardowe <- sqrt(wariancja)
+  odchylenie_standardowe <- sqrt(var(hala))
   
   #sortowanie 
   dane <-sort(hala)
@@ -103,20 +99,20 @@ Zadanie2 <- function(hala){
   }
   
   #dystrybuanta rozkladu hipotetycznego 
-  dystrybuanta_hipotetyczna<-dane
+  dystrybuanta_hipotetyczna <- dane
   for(i in hala) {
     dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcję dystrybuanty
   }
   
   #dystrybuanta empiryczna
-  dystrybuanta_empiryczna<-dane
+  dystrybuanta_empiryczna <- dane
   
   for(i in hala) {
     dystrybuanta_empiryczna[i] <- i/length(hala)
   }
   
   # roznica dystrybuant
-  roznica<-0
+  roznica <- 0
   for(i in hala) {
     roznica[i] <- abs(dystrybuanta_hipotetyczna[i] - dystrybuanta_empiryczna[i])
   }
