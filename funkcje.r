@@ -83,20 +83,18 @@ granica_wariancja<-function(n,war,wspChi){
   return(n*war/wspChi)
 }
 #Wzgledna precyzja oszacowania
-wzgledna_precyzja_wariancja <- function(dolna_granica,gorna_granica,war){
-  return((0.5 * (gorna_granica - dolna_granica) / war) * 100)
+wzgledna_precyzja_wariancja <- function(dolna_granica,gorna_granica,wariancja){
+  return((0.5 * (gorna_granica - dolna_granica) / wariancja) * 100)
 }
 
 statystyka <- function(x, y) {
-  # Funkcja zwraca wartosc statystyki testowej dla porownania
-  # dwoch srednich z prob podanych jako argumenty
+  # Test istotnosci dla porownania dwoch srednich
   x.srednia <- mean(x)
   x.wariancja <- var(x)
   y.srednia <- mean(y)
   y.wariancja <- var(y)
   
-  U = (x.srednia - y.srednia) / sqrt( (x.wariancja / length(x)) + (y.wariancja / length(y)) )
-  
+  U = (x.srednia - y.srednia) / sqrt((x.wariancja / length(x)) + (y.wariancja / length(y)))
   return(U)
 }
 

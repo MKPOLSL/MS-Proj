@@ -39,9 +39,9 @@ Zadanie1_szczegolowy <- function(hala){
   return(wynik)
 }
 
-Zadanie1_przedzialowy <- function(hala, n){
+Zadanie1_przedzialowy <- function(hala){
   # Szerokość przedziału klasowego
-  szerokosc_przedzialu <- (max(hala) - min(hala)) / n
+  szerokosc_przedzialu <- (max(hala) - min(hala)) / floor(sqrt(length(hala)))
   
   # Punkty przecięcia
   punkty_przeciecia = seq(min(hala), max(hala), szerokosc_przedzialu)
@@ -83,39 +83,36 @@ Zadanie1_przedzialowy <- function(hala, n){
 Zadanie2 <- function(hala){
   #wartosci potrzebne w dalszej czesci testu
   
-  
   tablica_rozkladu<-sqrt(length(hala))
   srednia=sum(hala)/length(hala)
-  #odchyenie standardowe
-  wariancja <- 0
-  for(val in hala){
-    wariancja <- wariancja + (val-srednia)^2/length(hala)
-  }
-  odchylenie_standardowe <- sqrt(wariancja)
   
-  #sortowanie starej i nowej 
+  #odchylenie standardowe
+  odchylenie_standardowe <- sqrt(var(hala))
+  
+  #sortowanie 
   dane <-sort(hala)
-  #standaryzacja starej
+  
+  #standaryzacja 
   standaryzacja<-dane
   for(i in hala){
     standaryzacja[i]<-(dane[i]-srednia)/odchylenie_standardowe
   }
   
-  #dystrybuanta rozkladu hipotetycznego starej
-  dystrybuanta_hipotetyczna<-dane
+  #dystrybuanta rozkladu hipotetycznego 
+  dystrybuanta_hipotetyczna <- dane
   for(i in hala) {
     dystrybuanta_hipotetyczna[i] <- pnorm(standaryzacja[i]) #pnorm zwraca funkcję dystrybuanty
   }
   
-  #dystrybuanta empiryczna starej
-  dystrybuanta_empiryczna<-dane
+  #dystrybuanta empiryczna
+  dystrybuanta_empiryczna <- dane
   
   for(i in hala) {
     dystrybuanta_empiryczna[i] <- i/length(hala)
   }
   
   # roznica dystrybuant
-  roznica<-0
+  roznica <- 0
   for(i in hala) {
     roznica[i] <- abs(dystrybuanta_hipotetyczna[i] - dystrybuanta_empiryczna[i])
   }
@@ -189,11 +186,11 @@ Zadanie5 <- function(stara_hala, nowa_hala)
   # Hipoteza zerowa: wartość wydajności pracy przy produkcji w starej hali są większe
   # Hipoteza alternatywna: wartość wydajności pracy przy produkcji w starej hali nie są większe
   
-  wartosc_statystyki <- statystyka(nowa_hala, stara_hala)
+  wartosc_statystyki <- statystyka(stara_hala, nowa_hala)
   kwantyl975 <- qnorm(0.975)
   
   print(paste("Obszar przyjec statystyki: (",format(kwantyl975, digits=3), ", nieskonczonosc)"))
-  print(paste("Obszar krytyczny statystyki: (-nieskonczonosc, ",format(kwantyl975, digits=3), ")"))
+  print(paste("Obszar krytyczny statystyki: (-nieskonczonosc, ",format(kwantyl975, digits=3), "]"))
   print(paste("Wartosc statystyki testowej: ", format(wartosc_statystyki, digits=3)))
   if(wartosc_statystyki < kwantyl975){
     print("Istnieja podstawy do odrzucenia hipotezy zerowej")
